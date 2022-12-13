@@ -1,21 +1,20 @@
-int PIN_PULSADOR = 2;
-int PIN_LED = 3;
-int ESTADO_LED = LOW;
+#include <SoftwareSerial.h>
+
+// Habilitar pines para comunicacion con modulo BT
+// RX Pin10
+// TX Pin11
+SoftwareSerial miBT(10,11);
 
 void setup() {
-  pinMode(PIN_PULSADOR, INPUT); // Pin2 como entrada, lectura del pulsador
-  pinMode(PIN_LED, OUTPUT); // Pin3 como salida para LED
+  Serial.begin(9600);
+  Serial.println("Listo");
+  miBT.begin(38400); // velocidad por defecto del modulo de BT
 }
 
 void loop() {
-  while(digitalRead(PIN_PULSADOR) == LOW) {
-    // no hacer nada cuando no esta pulsado
-  }
-  
-  ESTADO_LED = digitalRead(PIN_LED); // leer estado actual del LED
-  digitalWrite(PIN_LED, !ESTADO_LED); // cambiar el estado del LED
+  if (miBT.available()) // cuando hay informacion disponible desde el modulo BT [lee BT y envia a Arduino]
+    Serial.write(miBT.read());
 
-  while(digitalRead(PIN_PULSADOR) == HIGH) {
-    // rutina antirebote ya que el pulsador no cambia de estado inmediatamente
-  }
+  if (Serial.available()) // cuando hay informacion disponible en el monitor serial [lee Arduino y envia a BT]
+    miBT.write(Serial.read());
 }
