@@ -15,7 +15,7 @@ SoftwareSerial miBT(10,11);
 // {"spo2":"%s","temp":"%s"}
 char* msgBase = "{\"spo2\":\"%s\",\"temp\":\"%s\"}";
 
-float vSpO2 = 9876.98;
+float vSpO2 = 1000.98;
 float vTemp = 1234.12;
 
 // with length 8 allows values like: 9876.98
@@ -42,6 +42,9 @@ void loop() {
   
   // send message to app
   miBT.write(msg, strlen(msg)); 
+
+  // changing value
+  vSpO2 = vSpO2 + 1;
 
   // delay 1 second
   delay(1000); // delay 1s
