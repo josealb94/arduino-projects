@@ -6,6 +6,11 @@
 // Docs
 // [Concat float to string] (https://forum.arduino.cc/t/concatenate-float-w-a-string/143164/5)
 
+const int LOWER_SPO2_MEASUREMENT = 9500;
+const int HIGHER_SPO2_MEASUREMENT = 10000;
+const int LOWER_TEMP_MEASUREMENT = 3550;
+const int HIGHER_TEMP_MEASUREMENT = 3750;
+
 // Habilitar pines para comunicacion con modulo BT
 // RX Pin10
 // TX Pin11
@@ -15,8 +20,10 @@ SoftwareSerial miBT(10,11);
 // {"spo2":"%s","temp":"%s"}
 char* msgBase = "{\"spo2\":\"%s\",\"temp\":\"%s\"}";
 
-float vSpO2 = 1000.98;
-float vTemp = 1234.12;
+float vSpO2;
+float vTemp;
+//float vSpO2 = 1000.98;
+//float vTemp = 1234.12;
 
 // with length 8 allows values like: 9876.98
 // Note: 4 integers and 2 decimals
@@ -30,6 +37,9 @@ void setup() {
 }
 
 void loop() {
+  vSpO2 = generateRandomValues(LOWER_SPO2_MEASUREMENT, HIGHER_SPO2_MEASUREMENT);
+  vTemp = generateRandomValues(LOWER_TEMP_MEASUREMENT, HIGHER_TEMP_MEASUREMENT);
+  
   // parse values
   FtoChar2(vSpO2, sSpO2);
   FtoChar2(vTemp, sTemp);
@@ -48,6 +58,12 @@ void loop() {
 
   // delay 1 second
   delay(1000); // delay 1s
+}
+
+float generateRandomValues(float lowerMeasurenment, float higherMeasurenment) {
+  long randNumber = random(lowerMeasurenment,higherMeasurenment);
+  return (float) randNumber / 100.00;
+  
 }
 
 void funciona1() {
